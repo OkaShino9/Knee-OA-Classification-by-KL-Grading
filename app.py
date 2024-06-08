@@ -1,6 +1,6 @@
 import streamlit as st
 from fastbook import *
-from opencv import cv2
+import cv2
 
 def preprocess_image(image):
     denoised_image = cv2.fastNlMeansDenoising(image)
