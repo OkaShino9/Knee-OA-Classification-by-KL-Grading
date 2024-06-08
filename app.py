@@ -59,9 +59,9 @@ def predict(img, learn):
 
 st.sidebar.write('# Upload a x-ray knee image to classify!')
 
-# radio button สำหรับเลือกว่าจะทำนายรูปจาก validation set หรือ upload รูปเอง
+# radio button สำหรับเลือกว่าจะทำนายรูปจาก set set หรือ upload รูปเอง
 option = st.sidebar.radio('', ['Use a validation image', 'Use your own image', 'Take a photo'])
-# โหลดรูปจาก validation set แล้ว shuffle
+# โหลดรูปจาก set set แล้ว shuffle
 valid_images = glob.glob('images')
 valid_images.sort()
 for i in range(len(valid_images)):
@@ -104,7 +104,7 @@ elif option == 'Use your own image':
             # เรียก function ทำนาย
             predict(img, model)
 else:
-        fname = st.sidebar.camera_input('Take a photo of a dog')
+        fname = st.sidebar.camera_input('Take a photo of a knee x-ray image')
         if fname is None:
             st.sidebar.write("Please take a photo...")
         else:
