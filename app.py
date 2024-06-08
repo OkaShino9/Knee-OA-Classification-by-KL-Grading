@@ -1,10 +1,6 @@
 import streamlit as st
 from fastbook import *
-import cv2
-import pathlib
-
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
+from opencv-python import cv2
 
 def preprocess_image(image):
     denoised_image = cv2.fastNlMeansDenoising(image)
