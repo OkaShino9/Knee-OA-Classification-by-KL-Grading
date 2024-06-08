@@ -66,11 +66,11 @@ st.sidebar.write('# Upload a x-ray knee image to classify!')
 # radio button สำหรับเลือกว่าจะทำนายรูปจาก validation set หรือ upload รูปเอง
 option = st.sidebar.radio('', ['Use a validation image', 'Use your own image', 'Take a photo'])
 # โหลดรูปจาก validation set แล้ว shuffle
-valid_images = glob.glob('C:/Users/9/Desktop/deploy/image')
+valid_images = glob.glob('images')
 valid_images.sort()
 for i in range(len(valid_images)):
     k = str(valid_images[i])
-    k =k.replace('C:/Users/9/Desktop/deploy/image','')
+    k =k.replace('images','')
     valid_images[i] = k
 
 if option == 'Use a validation image':
