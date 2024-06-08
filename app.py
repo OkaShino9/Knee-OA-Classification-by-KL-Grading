@@ -1,28 +1,5 @@
 import streamlit as st
 from fastbook import *
-import cv2
-
-def preprocess_image(image):
-    denoised_image = cv2.fastNlMeansDenoising(image)
-    smoothed_image = cv2.GaussianBlur(denoised_image, (5, 5), 0)
-    auto_contrast = cv2.normalize(smoothed_image, None, 0, 255, cv2.NORM_MINMAX)
-    image32f = np.float32(auto_contrast)
-
-    # Calculate mu
-    mu = cv2.blur(image32f, (3, 3))
-
-    # Calculate mu2
-    mu2 = cv2.blur(np.square(image32f), (3, 3))
-
-    # Calculate sigma
-    sigma = np.sqrt(mu2 - np.multiply(mu, mu))
-    
-    # Normalize sigma to uint8
-    sigma_normalized = cv2.normalize(sigma, None, 0, 255, cv2.NORM_MINMAX)
-    sigma_uint8 = np.uint8(sigma_normalized)
-    inverted_image = 255 - sigma_uint8
-    
-    return inverted_image
 
 class PreprocessTransform(Transform):
     def encodes(self, img: PILImage):
