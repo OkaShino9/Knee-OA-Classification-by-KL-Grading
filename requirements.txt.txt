@@ -1,3 +1,0 @@
-fastbook
-opencv-python
-stremlit
