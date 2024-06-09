@@ -2,12 +2,24 @@ import streamlit as st
 from fastbook import *
 import glob
 from random import shuffle
-import urllib.request
-from PIL import Image
-import os
-from git import Repo
-import shutil
 
+def preprocess_image(image):
+    # Ensure the input is a single-channel 8-bit image
+    if len(image.shape) != 2 or image.dtype != np.uint8:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = np.uint8(image)
+    # Denoise the image
+    denoised_image = cv2.fastNlMeansDenoising(image)
+
+    # Normalize the image to improve contrast
+    auto_contrast = cv2.normalize(denoised_image, None, 0, 255, cv2.NORM_MINMAX)
+
+    # Apply CLAHE
+    equ = cv2.equalizeHist(auto_contrast)
+    smoothed_image = cv2.GaussianBlur(equ, (5, 5), 0)
+    #inverted_image = 255 - smoothed_image
+    return smoothed_image
+    
 class PreprocessTransform(Transform):
     def encodes(self, img: PILImage):
         img_np = np.array(img)
