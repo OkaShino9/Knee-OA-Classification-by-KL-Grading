@@ -1,0 +1,5 @@
+fastbook
+streamlit
+ipywidgets
+voila
+GitPython

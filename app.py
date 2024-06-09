@@ -1,33 +1,25 @@
 import streamlit as st
 from fastbook import *
-import cv2
-import pathlib
-
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
+import glob
+from random import shuffle
 
 def preprocess_image(image):
+    # Ensure the input is a single-channel 8-bit image
+    if len(image.shape) != 2 or image.dtype != np.uint8:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = np.uint8(image)
+    # Denoise the image
     denoised_image = cv2.fastNlMeansDenoising(image)
-    smoothed_image = cv2.GaussianBlur(denoised_image, (5, 5), 0)
-    auto_contrast = cv2.normalize(smoothed_image, None, 0, 255, cv2.NORM_MINMAX)
-    image32f = np.float32(auto_contrast)
 
-    # Calculate mu
-    mu = cv2.blur(image32f, (3, 3))
+    # Normalize the image to improve contrast
+    auto_contrast = cv2.normalize(denoised_image, None, 0, 255, cv2.NORM_MINMAX)
 
-    # Calculate mu2
-    mu2 = cv2.blur(np.square(image32f), (3, 3))
-
-    # Calculate sigma
-    sigma = np.sqrt(mu2 - np.multiply(mu, mu))
+    # Apply CLAHE
+    equ = cv2.equalizeHist(auto_contrast)
+    smoothed_image = cv2.GaussianBlur(equ, (5, 5), 0)
+    #inverted_image = 255 - smoothed_image
+    return smoothed_image
     
-    # Normalize sigma to uint8
-    sigma_normalized = cv2.normalize(sigma, None, 0, 255, cv2.NORM_MINMAX)
-    sigma_uint8 = np.uint8(sigma_normalized)
-    inverted_image = 255 - sigma_uint8
-    
-    return inverted_image
-
 class PreprocessTransform(Transform):
     def encodes(self, img: PILImage):
         img_np = np.array(img)
@@ -63,14 +55,14 @@ def predict(img, learn):
 
 st.sidebar.write('# Upload a x-ray knee image to classify!')
 
-# radio button สำหรับเลือกว่าจะทำนายรูปจาก validation set หรือ upload รูปเอง
+# radio button สำหรับเลือกว่าจะทำนายรูปจาก set set หรือ upload รูปเอง
 option = st.sidebar.radio('', ['Use a validation image', 'Use your own image', 'Take a photo'])
-# โหลดรูปจาก validation set แล้ว shuffle
-valid_images = glob.glob('C:/Users/9/Desktop/deploy/image')
+# โหลดรูปจาก set set แล้ว shuffle
+valid_images = glob.glob('images')
 valid_images.sort()
 for i in range(len(valid_images)):
     k = str(valid_images[i])
-    k =k.replace('C:/Users/9/Desktop/deploy/image','')
+    k =k.replace('images','')
     valid_images[i] = k
 
 if option == 'Use a validation image':
@@ -108,7 +100,7 @@ elif option == 'Use your own image':
             # เรียก function ทำนาย
             predict(img, model)
 else:
-        fname = st.sidebar.camera_input('Take a photo of a dog')
+        fname = st.sidebar.camera_input('Take a photo of a knee x-ray image')
         if fname is None:
             st.sidebar.write("Please take a photo...")
         else:
