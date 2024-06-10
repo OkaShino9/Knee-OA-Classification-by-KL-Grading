@@ -36,19 +36,33 @@ def classify_img(data):
 st.title("Knee Osteoarthritis Classification by KL Grading 🦴🦵")
 
 bytes_data = None
-uploaded_image = st.file_uploader("Choose your image:")
-if uploaded_image:
-    bytes_data = uploaded_image.getvalue()
-    st.image(bytes_data, caption="Uploaded image")   
+
+if option == 'Use a test image':
+    # List of test image URLs from your GitHub repository
+    test_image_urls = [
+        "https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/tree/main/images/0",
+        "https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/tree/main/images/1",
+        "https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/tree/main/images/2",
+        "https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/tree/main/images/3",
+        "https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/tree/main/images/4",
+    ]
+    
+    test_image = st.selectbox("Choose a test image:", test_image_urls)
+    response = requests.get(test_image)
+    bytes_data = response.content
+    st.image(bytes_data, caption="Test image")
+
+elif option == 'Use your own image':
+    uploaded_image = st.file_uploader("Choose your image:")
+    if uploaded_image:
+        bytes_data = uploaded_image.getvalue()
+        st.image(bytes_data, caption="Uploaded image")
+
 if bytes_data:
     classify = st.button("CLASSIFY!")
     if classify:
-        label, confidence = classify_img(bytes_data)
+        image = Image.open(BytesIO(bytes_data))
+        label, confidence = classify_img(image)
         st.write(f"This is grade {label}! ({confidence:.04f})")
-
-st.sidebar.write('# Upload a x-ray knee image to classify!')
-
-# Radio button to choose the image source
-option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
 
 
