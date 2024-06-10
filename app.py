@@ -2,6 +2,9 @@ import streamlit as st
 from fastbook import *
 import cv2
 import numpy as np
+import requests
+from PIL import Image
+from io import BytesIO
 
 def preprocess_image(image):
     # Ensure the input is a single-channel 8-bit image
