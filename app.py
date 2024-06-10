@@ -29,11 +29,7 @@ class PreprocessTransform(Transform):
         return PILImage.create(preprocessed_img)
 
 ## LOAD MODEL
-try:
-    learn_inf = load_learner("model.pkl")
-    st.write("Model loaded successfully")
-except Exception as e:
-    st.write(f"Error loading model: {e}")
+learn_inf = load_learner("model.pkl")
 
 ## CLASSIFIER
 def classify_img(data):
@@ -80,7 +76,6 @@ if bytes_data:
     classify = st.button("CLASSIFY!")
     if classify:
         image = Image.open(BytesIO(bytes_data))
-        st.write("Image opened successfully")
         try:
             # Debug: Check image format and type
             st.write(f"Image format: {image.format}, Image mode: {image.mode}")
