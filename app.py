@@ -63,7 +63,7 @@ if option == 'Use a validation image':
     if st.sidebar.button("Predict Now!"):
         predict(img, model)
 
-else option == 'Use your own image':
+elif option == 'Use your own image':
     st.sidebar.write('### Select an image to upload')
     fname = st.sidebar.file_uploader('', type=['jpg', 'jpeg', 'png'], accept_multiple_files=False)
     if fname is None:
