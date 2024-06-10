@@ -48,9 +48,9 @@ class PreprocessTransform(Transform):
         preprocessed_img = preprocess_image(img_np)
         return PILImage.create(preprocessed_img)
 
-## LOAD MODEL
-learn_inf = load_learner("model.pkl")
-learn_inf.remove_cb(fastai.callback.progress.ProgressCallback)  # Remove the progress bar callback
+# LOAD MODEL
+learn_inf = load_learner("model.pkl", cpu=True)
+learn_inf.dls.device = 'cpu'  # Ensure the device is set to CPU
 
 ## CLASSIFIER
 def classify_img(data):
