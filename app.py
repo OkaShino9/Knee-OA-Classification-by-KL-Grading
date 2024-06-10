@@ -1,5 +1,5 @@
 import streamlit as st
-from fastbook import *
+from fastbook import load_learner
 import cv2
 import numpy as np
 import requests
@@ -29,7 +29,11 @@ class PreprocessTransform(Transform):
         return PILImage.create(preprocessed_img)
 
 ## LOAD MODEL
-learn_inf = load_learner("model.pkl")
+try:
+    learn_inf = load_learner("model.pkl")
+    st.write("Model loaded successfully")
+except Exception as e:
+    st.write(f"Error loading model: {e}")
 
 ## CLASSIFIER
 def classify_img(data):
@@ -63,6 +67,8 @@ if option == 'Use a test image':
                 response = requests.get(image_url)
                 bytes_data = response.content
                 st.image(bytes_data, caption="Test image")
+        else:
+            st.write("Error fetching image list from GitHub")
 
 elif option == 'Use your own image':
     uploaded_image = st.file_uploader("Choose your image:")
@@ -74,5 +80,9 @@ if bytes_data:
     classify = st.button("CLASSIFY!")
     if classify:
         image = Image.open(BytesIO(bytes_data))
-        label, confidence = classify_img(image)
-        st.write(f"This is grade {label}! ({confidence:.04f})")
+        st.write("Image opened successfully")
+        try:
+            label, confidence = classify_img(image)
+            st.write(f"This is grade {label}! ({confidence:.04f})")
+        except Exception as e:
+            st.write(f"Error during classification: {e}")
