@@ -37,7 +37,8 @@ def classify_img(data):
     return pred, probs[pred_idx]
 
 st.title("Knee Osteoarthritis Classification by KL Grading 🦴🦵")
-
+st.sidebar.write('# Upload a x-ray knee image to classify!')
+option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
 bytes_data = None
 
 if option == 'Use a test image':
