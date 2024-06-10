@@ -47,7 +47,7 @@ def predict(img, learn):
 st.sidebar.write('# Upload a x-ray knee image to classify!')
 
 # Radio button to choose the image source
-option = st.sidebar.radio('', ['Use a validation image', 'Use your own image', 'Take a photo'])
+option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
 # Load validation images and shuffle
 valid_images = glob.glob('OkaShino9/Knee-OA-Classification-by-KL-Grading/images/*')
 valid_images.sort()
@@ -57,7 +57,7 @@ for i in range(len(valid_images)):
 if option == 'Use a validation image':
     st.sidebar.write('### Select a validation image')
     fname = st.sidebar.selectbox('', valid_images)
-    img_path = f'OkaShino9/Knee-OA-Classification-by-KL-Grading/images/{fname}'
+    img_path = 'OkaShino9/Knee-OA-Classification-by-KL-Grading/images/'
     img = Image.open(img_path)
     st.sidebar.image(img, 'Is this the image you want to predict?', use_column_width=True)
     if st.sidebar.button("Predict Now!"):
