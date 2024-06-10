@@ -1,5 +1,5 @@
 import streamlit as st
-from fastbook import load_learner
+from fastbook import *
 import cv2
 import numpy as np
 import requests
