@@ -26,52 +26,29 @@ class PreprocessTransform(Transform):
         preprocessed_img = preprocess_image(img_np)
         return PILImage.create(preprocessed_img)
 
-learn = load_learner('model.pkl')
-model = learn.model
+## LOAD MODEl
+learn_inf = load_learner("model.pkl")
+## CLASSIFIER
+def classify_img(data):
+    pred, pred_idx, probs = learn_inf.predict(data)
+    return pred, probs[pred_idx]
 
-st.title("Knee Osteoarthritis Classification by KL Grading")
+st.title("Knee Osteoarthritis Classification by KL Grading 🦴🦵")
 
-def predict(img, learn):
-    # Resize image
-    pimg = img.resize([224,224])
-    # Predict using the model
-    pred, pred_idx, pred_prob = learn.predict(pimg)
-    pred = pred.split('_')[1:]
-    pred = ' '.join(pred)
-    # Display prediction
-    st.success(f'This is "Grade {pred}" with the probability of {pred_prob[pred_idx]*100:.02f}%')
-    # Show the predicted image
-    st.image(img, use_column_width=True)
-    st.balloons()
+bytes_data = None
+uploaded_image = st.file_uploader("Choose your image:")
+if uploaded_image:
+    bytes_data = uploaded_image.getvalue()
+    st.image(bytes_data, caption="Uploaded image")   
+if bytes_data:
+    classify = st.button("CLASSIFY!")
+    if classify:
+        label, confidence = classify_img(bytes_data)
+        st.write(f"It is a {label}! ({confidence:.04f})")
 
 st.sidebar.write('# Upload a x-ray knee image to classify!')
 
 # Radio button to choose the image source
 option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
-# Load validation images and shuffle
-valid_images = glob.glob('OkaShino9/Knee-OA-Classification-by-KL-Grading/images/*')
-valid_images.sort()
-for i in range(len(valid_images)):
-    valid_images[i] = valid_images[i].replace('OkaShino9/Knee-OA-Classification-by-KL-Grading/images/', '')
 
-if option == 'Use a validation image':
-    st.sidebar.write('### Select a validation image')
-    fname = st.sidebar.selectbox('', valid_images)
-    img_path = 'OkaShino9/Knee-OA-Classification-by-KL-Grading/images/'
-    img = Image.open(img_path)
-    st.sidebar.image(img, 'Is this the image you want to predict?', use_column_width=True)
-    if st.sidebar.button("Predict Now!"):
-        predict(img, model)
-
-elif option == 'Use your own image':
-    st.sidebar.write('### Select an image to upload')
-    fname = st.sidebar.file_uploader('', type=['jpg', 'jpeg', 'png'], accept_multiple_files=False)
-    if fname is None:
-        st.sidebar.write("Please select an image...")
-    else:
-        img = Image.open(fname)
-        img = img.convert('RGB')
-        st.sidebar.image(img, 'Is this the image you want to predict?', use_column_width=True)
-        if st.sidebar.button("Predict Now!"):
-            predict(img, model)
 
