@@ -43,16 +43,21 @@ bytes_data = None
 
 if option == 'Use a test image':
     # List of test image URLs from your GitHub repository
-    test_image_urls = [
-        "https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/tree/main/images/0",
-        "https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/tree/main/images/1",
-        "https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/tree/main/images/2",
-        "https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/tree/main/images/3",
-        "https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/tree/main/images/4",
-    ]
-    
-    test_image = st.selectbox("Choose a test image:", test_image_urls)
-    response = requests.get(test_image)
+    base_url = "https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/images/"
+    class_folders = ["0", "1", "2", "3", "4"]
+
+    image_urls = []
+    for class_folder in class_folders:
+        folder_url = f"{base_url}{class_folder}/"
+        response = requests.get(f"https://api.github.com/repos/OkaShino9/Knee-OA-Classification-by-KL-Grading/contents/images/{class_folder}")
+        if response.status_code == 200:
+            files = response.json()
+            for file in files:
+                if file["name"].lower().endswith((".png", ".jpg", ".jpeg")):
+                    image_urls.append(f"{folder_url}{file['name']}")
+
+    selected_image_url = st.selectbox("Choose a test image:", image_urls)
+    response = requests.get(selected_image_url)
     bytes_data = response.content
     st.image(bytes_data, caption="Test image")
 
