@@ -36,15 +36,23 @@ def classify_img(data):
     pred, pred_idx, probs = learn_inf.predict(data)
     return pred, probs[pred_idx]
 
-st.title("Knee Osteoarthritis Classification by KL Grading 🦴🦵")
+# Display title
+st.title("KNEE OSTEOARTHRITIS CLASSIFICATION BY KELLGREN AND LAWRENCE GRADING SYSTEM🦴🦵")
 
 # Sidebar for selecting image source
-st.sidebar.write('# Upload a x-ray knee image to classify!')
+st.sidebar.image("https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/AIB_logo.png", use_column_width=True)
+st.sidebar.write('# UPLOAD A X-RAY KNEE IMAGE TO CLASSIFY! 🧐')
 
 # Radio button to choose the image source
 option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
 
 bytes_data = None
+
+st.sidebar.write(" ")
+st.sidebar.write(" ")
+st.sidebar.markdown('This web application was developed by Chananchai Chanmol and is a part of AI Builders Gen IV, organized by VISTEC, Central Digital and Mahidol University.')
+st.sidebar.write("AI Builders page [link](https://www.facebook.com/aibuildersx)")
+st.sidebar.write("Medium [link](https://github.com/GemmyTheGeek/FoodyDudy)")
 
 if option == 'Use a test image':
     base_url = "https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/images/"
