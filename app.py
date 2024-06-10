@@ -47,6 +47,10 @@ option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
 
 bytes_data = None
 
+st.sidebar.markdown('This web application was developed by Chananchai Chanmol and is a part of AI Builders Gen IV, organized by VISTEC, Central Group and Mahidol University.')
+st.sidebar.write("AI Builders page [link](https://www.facebook.com/aibuildersx)")
+st.sidebar.write("Medium [link](https://github.com/GemmyTheGeek/FoodyDudy)")
+
 if option == 'Use a test image':
     base_url = "https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/images/"
     class_folders = ["0", "1", "2", "3", "4"]
