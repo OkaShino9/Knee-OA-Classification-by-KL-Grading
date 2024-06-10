@@ -58,11 +58,11 @@ st.sidebar.write('# Upload a x-ray knee image to classify!')
 # radio button สำหรับเลือกว่าจะทำนายรูปจาก set set หรือ upload รูปเอง
 option = st.sidebar.radio('', ['Use a validation image', 'Use your own image', 'Take a photo'])
 # โหลดรูปจาก set set แล้ว shuffle
-valid_images = glob.glob('images')
+valid_images = glob.glob('OkaShino9/Knee-OA-Classification-by-KL-Grading/images')
 valid_images.sort()
 for i in range(len(valid_images)):
     k = str(valid_images[i])
-    k =k.replace('images','')
+    k =k.replace('OkaShino9/Knee-OA-Classification-by-KL-Grading/images','')
     valid_images[i] = k
 
 if option == 'Use a validation image':
