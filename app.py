@@ -6,6 +6,31 @@ import requests
 from PIL import Image
 from io import BytesIO
 
+def add_custom_css():
+    st.markdown("""
+    <style>
+    .main {
+        background-color: #fafafa;
+    }
+    .sidebar .sidebar-content {
+        background-color: #f0f0f5;
+        color: #000;
+    }
+    .stButton>button {
+        background-color: #ff9999;
+        color: white;
+        border-radius: 8px;
+        border: none;
+    }
+    .stButton>button:hover {
+        background-color: #ff4d4d;
+    }
+    .stRadio label, .stSelectbox label {
+        color: #333;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
 def preprocess_image(image):
     # Ensure the input is a single-channel 8-bit image
     if len(image.shape) != 2 or image.dtype != np.uint8:
