@@ -26,7 +26,7 @@ class PreprocessTransform(Transform):
         preprocessed_img = preprocess_image(img_np)
         return PILImage.create(preprocessed_img)
 
-learn = load_learner('pre_resnet34.pkl')
+learn = load_learner('model.pkl')
 model = learn.model
 
 st.title("Knee Osteoarthritis Classification by KL Grading")
