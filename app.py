@@ -2,6 +2,11 @@ import streamlit as st
 from fastbook import *
 import cv2
 import numpy as np
+import requests
+from PIL import Image
+from io import BytesIO
+from pathlib import Path
+import os
 
 def preprocess_image(image):
     # Ensure the input is a single-channel 8-bit image
@@ -19,15 +24,15 @@ def preprocess_image(image):
     inverted_image = 255 - smoothed_image
     return inverted_image
 
-
 class PreprocessTransform(Transform):
     def encodes(self, img: PILImage):
         img_np = np.array(img)
         preprocessed_img = preprocess_image(img_np)
         return PILImage.create(preprocessed_img)
 
-## LOAD MODEl
+## LOAD MODEL
 learn_inf = load_learner("model.pkl")
+
 ## CLASSIFIER
 def classify_img(data):
     pred, pred_idx, probs = learn_inf.predict(data)
@@ -35,15 +40,43 @@ def classify_img(data):
 
 st.title("Knee Osteoarthritis Classification by KL Grading 🦴🦵")
 
+# Sidebar for selecting image source
+st.sidebar.write('# Upload a x-ray knee image to classify!')
+
+# Radio button to choose the image source
+option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
+
 bytes_data = None
-uploaded_image = st.file_uploader("Choose your image:")
-if uploaded_image:
-    bytes_data = uploaded_image.getvalue()
-    st.image(bytes_data, caption="Uploaded image")   
+
+if option == 'Use a test image':
+    # List of test image URLs from your GitHub repository
+    base_url = "https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/images/"
+    class_folders = ["0", "1", "2", "3", "4"]
+
+    image_urls = []
+    for class_folder in class_folders:
+        folder_url = f"{base_url}{class_folder}/"
+        response = requests.get(f"https://api.github.com/repos/OkaShino9/Knee-OA-Classification-by-KL-Grading/contents/images/{class_folder}")
+        if response.status_code == 200:
+            files = response.json()
+            for file in files:
+                if file["name"].lower().endswith((".png", ".jpg", ".jpeg")):
+                    image_urls.append(f"{folder_url}{file['name']}")
+
+    selected_image_url = st.selectbox("Choose a test image:", image_urls)
+    response = requests.get(selected_image_url)
+    bytes_data = response.content
+    st.image(bytes_data, caption="Test image")
+
+elif option == 'Use your own image':
+    uploaded_image = st.file_uploader("Choose your image:")
+    if uploaded_image:
+        bytes_data = uploaded_image.getvalue()
+        st.image(bytes_data, caption="Uploaded image")
+
 if bytes_data:
     classify = st.button("CLASSIFY!")
     if classify:
-        label, confidence = classify_img(bytes_data)
+        image = Image.open(BytesIO(bytes_data))
+        label, confidence = classify_img(image)
         st.write(f"This is grade {label}! ({confidence:.04f})")
-
-st.sidebar.write('# Upload a x-ray knee image to classify!')
