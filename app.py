@@ -61,7 +61,9 @@ def classify_img(data):
     pred, pred_idx, probs = learn_inf.predict(data)
     return pred, probs[pred_idx]
 
+add_custom_css()
 st.title("Knee Osteoarthritis Classification by KL Grading 🦴🦵")
+st.markdown("---")
 st.sidebar.write('# Upload a x-ray knee image to classify!')
 option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
 bytes_data = None
@@ -91,6 +93,7 @@ elif option == 'Use your own image':
         st.image(bytes_data, caption="Uploaded image")
 
 if bytes_data:
+    st.markdown("---")
     classify = st.button("CLASSIFY!")
     if classify:
         image = Image.open(BytesIO(bytes_data))
