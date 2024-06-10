@@ -76,7 +76,7 @@ if bytes_data:
     classify = st.button("CLASSIFY!")
     if classify:
         image = Image.open(BytesIO(bytes_data))
-            if image.mode != "RGB":
-                image = image.convert("RGB")
-            label, confidence = classify_img(image)
-            st.write(f"This is grade {label}! ({confidence:.04f})")
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+        label, confidence = classify_img(image)
+        st.write(f"This is grade {label}! ({confidence:.04f})")
