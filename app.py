@@ -47,7 +47,7 @@ if bytes_data:
     classify = st.button("CLASSIFY!")
     if classify:
         label, confidence = classify_img(bytes_data)
-        st.write(f"It is a {label}! ({confidence:.04f})")
+        st.write(f"This is grade {label}! ({confidence:.04f})")
 
 st.sidebar.write('# Upload a x-ray knee image to classify!')
 
