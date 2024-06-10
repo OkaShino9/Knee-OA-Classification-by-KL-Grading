@@ -39,6 +39,7 @@ def classify_img(data):
 st.title("Knee Osteoarthritis Classification by KL Grading 🦴🦵")
 
 # Sidebar for selecting image source
+st.sidebar.image("https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/AIB_logo.png", use_column_width=True)
 st.sidebar.write('# Upload a x-ray knee image to classify!')
 
 # Radio button to choose the image source
