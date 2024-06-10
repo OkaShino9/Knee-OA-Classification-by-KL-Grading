@@ -51,7 +51,7 @@ bytes_data = None
 if option == 'Use a test image':
     # List of test image URLs from your GitHub repository
     base_url = "https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/images/"
-    class_folders = ["class0", "class1", "class2", "class3", "class4"]
+    class_folders = ["0", "1", "2", "3", "4"]
 
     image_urls = []
     for class_folder in class_folders:
