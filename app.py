@@ -13,12 +13,15 @@ def preprocess_image(image):
         image = np.uint8(image)
     # Denoise the image
     denoised_image = cv2.fastNlMeansDenoising(image)
+    
     # Normalize the image to improve contrast
     auto_contrast = cv2.normalize(denoised_image, None, 0, 255, cv2.NORM_MINMAX)
-    # Apply CLAHE
+    
     equ = cv2.equalizeHist(auto_contrast)
     smoothed_image = cv2.GaussianBlur(equ, (5, 5), 0)
-    return smoothed_image
+    inverted_image = 255 - smoothed_image
+    return inverted_image
+
 
 class PreprocessTransform(Transform):
     def encodes(self, img: PILImage):
