@@ -36,11 +36,11 @@ def classify_img(data):
     pred, pred_idx, probs = learn_inf.predict(data)
     return pred, probs[pred_idx]
 
-st.title("Knee Osteoarthritis Classification by Kellgren and Lawrence system 🦴🦵")
+st.title("KNEE OSTEOARTHRITIS CLASSIFICATION BY KELLGREN AND LAWRENCE SYSTEM🦴🦵")
 
 # Sidebar for selecting image source
 st.sidebar.image("https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/AIB_logo.png", use_column_width=True)
-st.sidebar.write('# Upload a x-ray knee image to classify!')
+st.sidebar.write('# UPLOAD A X-RAY KNEE IMAGE TO CLASSIFY!')
 
 # Radio button to choose the image source
 option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
