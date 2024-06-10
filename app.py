@@ -1,10 +1,7 @@
 import streamlit as st
 from fastbook import *
-import glob
-from random import shuffle
 import cv2
 import numpy as np
-from PIL import Image
 
 def preprocess_image(image):
     # Ensure the input is a single-channel 8-bit image
