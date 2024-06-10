@@ -36,7 +36,7 @@ def classify_img(data):
     pred, pred_idx, probs = learn_inf.predict(data)
     return pred, probs[pred_idx]
 
-st.title("KNEE OSTEOARTHRITIS CLASSIFICATION BY KELLGREN AND LAWRENCE SYSTEM🦴🦵")
+st.title("KNEE OSTEOARTHRITIS CLASSIFICATION BY KELLGREN AND LAWRENCE GRADING SYSTEM🦴🦵")
 
 # Sidebar for selecting image source
 st.sidebar.image("https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/AIB_logo.png", use_column_width=True)
