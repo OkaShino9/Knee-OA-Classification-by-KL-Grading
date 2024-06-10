@@ -82,6 +82,16 @@ if bytes_data:
         image = Image.open(BytesIO(bytes_data))
         st.write("Image opened successfully")
         try:
+            # Debug: Check image format and type
+            st.write(f"Image format: {image.format}, Image mode: {image.mode}")
+            
+            # Convert to RGB mode if necessary
+            if image.mode != "RGB":
+                image = image.convert("RGB")
+            
+            # Debug: Check converted image format and type
+            st.write(f"Converted image format: {image.format}, Converted image mode: {image.mode}")
+            
             label, confidence = classify_img(image)
             st.write(f"This is grade {label}! ({confidence:.04f})")
         except Exception as e:
