@@ -10,7 +10,7 @@ def add_custom_css():
     st.markdown("""
     <style>
     .main {
-        background-color: #000000;
+        background-color: #fafafa;
     }
     .sidebar .sidebar-content {
         background-color: #f0f0f5;
