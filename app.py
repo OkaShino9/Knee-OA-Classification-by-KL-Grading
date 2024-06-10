@@ -40,7 +40,7 @@ st.title("KNEE OSTEOARTHRITIS CLASSIFICATION BY KELLGREN AND LAWRENCE GRADING SY
 
 # Sidebar for selecting image source
 st.sidebar.image("https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/AIB_logo.png", use_column_width=True)
-st.sidebar.write('# UPLOAD A X-RAY KNEE IMAGE TO CLASSIFY!')
+st.sidebar.write('# UPLOAD A X-RAY KNEE IMAGE TO CLASSIFY! 🧐')
 
 # Radio button to choose the image source
 option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
