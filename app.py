@@ -50,7 +50,7 @@ bytes_data = None
 
 st.sidebar.write(" ")
 st.sidebar.write(" ")
-st.sidebar.markdown('This web application was developed by Chananchai Chanmol and is a part of AI Builders Gen IV, organized by VISTEC, Central Digital and Mahidol University.')
+st.sidebar.markdown('This web application was developed by Chananchai Chanmol and is a part of AI Builders project, organized by VISTEC, Central Digital and Mahidol University.')
 st.sidebar.write("AI Builders page [link](https://www.facebook.com/aibuildersx)")
 st.sidebar.write("Medium [link](https://github.com/GemmyTheGeek/FoodyDudy)")
 
