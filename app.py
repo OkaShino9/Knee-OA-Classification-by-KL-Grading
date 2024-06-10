@@ -1,7 +1,10 @@
 import streamlit as st
 from fastbook import *
-import glob
-from random import shuffle
+import cv2
+import numpy as np
+import requests
+from PIL import Image
+from io import BytesIO
 
 def preprocess_image(image):
     # Ensure the input is a single-channel 8-bit image
@@ -10,110 +13,70 @@ def preprocess_image(image):
         image = np.uint8(image)
     # Denoise the image
     denoised_image = cv2.fastNlMeansDenoising(image)
-
+    
     # Normalize the image to improve contrast
     auto_contrast = cv2.normalize(denoised_image, None, 0, 255, cv2.NORM_MINMAX)
-
-    # Apply CLAHE
+    
     equ = cv2.equalizeHist(auto_contrast)
     smoothed_image = cv2.GaussianBlur(equ, (5, 5), 0)
-    #inverted_image = 255 - smoothed_image
-    return smoothed_image
-    
+    inverted_image = 255 - smoothed_image
+    return inverted_image
+
 class PreprocessTransform(Transform):
     def encodes(self, img: PILImage):
         img_np = np.array(img)
         preprocessed_img = preprocess_image(img_np)
         return PILImage.create(preprocessed_img)
 
-learn = load_learner('pre_resnet34.pkl')
-model = learn.model
+## LOAD MODEL
+learn_inf = load_learner("model.pkl")
 
-st.title("Knee Osteoarthritis Classification by KL Grading")
+## CLASSIFIER
+def classify_img(data):
+    pred, pred_idx, probs = learn_inf.predict(data)
+    return pred, probs[pred_idx]
 
-def predict(img, learn):
-    # ย่อขนาดรูป
-    pimg = img.resize([224,224])
-    
-    # ทำนายจากโมเดลที่ให้
-    pred, pred_idx, pred_prob = learn.predict(pimg)
-        
-    pred = pred.split('_')[1:]
-    
-    if pred[-1] == 'Dog':
-        pred = ' '.join(pred[:len(pred)-1])
-    else:
-        pred = ' '.join(pred)
+st.title("Knee Osteoarthritis Classification by KL Grading 🦴🦵")
 
-    # โชว์ผลการทำนาย
-    st.success(f'This is "Grade {pred}" with the probability of {pred_prob[pred_idx]*100:.02f}%')
-    
-    # โชว์รูปที่ถูกทำนาย
-    st.image(img, use_column_width=True)
-    
-    st.balloons()
-
+# Sidebar for selecting image source
 st.sidebar.write('# Upload a x-ray knee image to classify!')
 
-# radio button สำหรับเลือกว่าจะทำนายรูปจาก set set หรือ upload รูปเอง
-option = st.sidebar.radio('', ['Use a validation image', 'Use your own image', 'Take a photo'])
-# โหลดรูปจาก set set แล้ว shuffle
-valid_images = glob.glob('images')
-valid_images.sort()
-for i in range(len(valid_images)):
-    k = str(valid_images[i])
-    k =k.replace('images','')
-    valid_images[i] = k
+# Radio button to choose the image source
+option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
 
-if option == 'Use a validation image':
-    st.sidebar.write('### Select a validation image')
-    fname = st.sidebar.selectbox('', valid_images)
-    
-    # เปิดรูป
-    img = Image.open(f'{fname}')
+bytes_data = None
 
-    st.sidebar.image(img, f'Is this the image you want to predict?', use_column_width=True)
+if option == 'Use a test image':
+    base_url = "https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/images/"
+    class_folders = ["0", "1", "2", "3", "4"]
 
-    if st.sidebar.button("Predict Now!"):
-        # เรียก function ทำนาย
-        predict(img, model)
-        
-elif option == 'Use your own image':
-    st.sidebar.write('### Select an image to upload')
-    fname = st.sidebar.file_uploader('',
-                                     type=['jpg', 'jpeg', 'png'],
-                                     accept_multiple_files=False)
-    if fname is None:
-        st.sidebar.write("Please select an image...")
-    else:
-        # เปิดรูป
-        img = Image.open(fname)
-        # เปลี่ยน format ภาพ
-        img = img.convert('RGB')
-        img.save('fname.jpg')
-        
-        img = Image.open('fname.jpg')
-        
-        st.sidebar.image(img, f'Is this the image you want to predict?', use_column_width=True)
-
-        if st.sidebar.button("Predict Now!"):
-            # เรียก function ทำนาย
-            predict(img, model)
-else:
-        fname = st.sidebar.camera_input('Take a photo of a knee x-ray image')
-        if fname is None:
-            st.sidebar.write("Please take a photo...")
+    selected_folder = st.selectbox("Choose a folder (class):", class_folders)
+    if selected_folder:
+        folder_url = f"{base_url}{selected_folder}/"
+        response = requests.get(f"https://api.github.com/repos/OkaShino9/Knee-OA-Classification-by-KL-Grading/contents/images/{selected_folder}")
+        if response.status_code == 200:
+            files = response.json()
+            image_files = [file["name"] for file in files if file["name"].lower().endswith((".png", ".jpg", ".jpeg"))]
+            selected_image = st.selectbox("Choose an image:", image_files)
+            if selected_image:
+                image_url = f"{folder_url}{selected_image}"
+                response = requests.get(image_url)
+                bytes_data = response.content
+                st.image(bytes_data, caption="Test image")
         else:
-            # เปิดรูป
-            img = Image.open(fname)
-            # เปลี่ยน format ภาพ
-            img = img.convert('RGB')
-            img.save('fname.jpg')
+            st.write("Error fetching image list from GitHub")
 
-            img = Image.open('fname.jpg')
+elif option == 'Use your own image':
+    uploaded_image = st.file_uploader("Choose your image:")
+    if uploaded_image:
+        bytes_data = uploaded_image.getvalue()
+        st.image(bytes_data, caption="Uploaded image")
 
-            st.sidebar.image(img, 'Is this the image you want to predict?', use_column_width=True)
-
-            if st.sidebar.button("Predict Now!"):
-                # เรียก function ทำนาย
-                predict(img, model)
+if bytes_data:
+    classify = st.button("CLASSIFY!")
+    if classify:
+        image = Image.open(BytesIO(bytes_data))
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+        label, confidence = classify_img(image)
+        st.write(f"This is grade {label}! ({confidence:.04f})")

@@ -1,5 +1,5 @@
 fastbook
 streamlit
-ipywidgets
-voila
-GitPython
+opencv-python-headless
+requests
+pillow
