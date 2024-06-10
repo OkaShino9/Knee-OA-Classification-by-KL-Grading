@@ -1,3 +1,5 @@
 fastbook
 streamlit
 opencv-python-headless
+requests
+pillow
