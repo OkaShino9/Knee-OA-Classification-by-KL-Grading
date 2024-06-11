@@ -7,14 +7,11 @@ from PIL import Image
 from io import BytesIO
 
 def preprocess_image(image):
-    # Ensure the input is a single-channel 8-bit image
     if len(image.shape) != 2 or image.dtype != np.uint8:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         image = np.uint8(image)
-    # Denoise the image
     denoised_image = cv2.fastNlMeansDenoising(image)
     
-    # Normalize the image to improve contrast
     auto_contrast = cv2.normalize(denoised_image, None, 0, 255, cv2.NORM_MINMAX)
     
     equ = cv2.equalizeHist(auto_contrast)
@@ -28,22 +25,17 @@ class PreprocessTransform(Transform):
         preprocessed_img = preprocess_image(img_np)
         return PILImage.create(preprocessed_img)
 
-## LOAD MODEL
 learn_inf = load_learner("model.pkl")
 
-## CLASSIFIER
 def classify_img(data):
     pred, pred_idx, probs = learn_inf.predict(data)
     return pred, probs[pred_idx]
 
-# Display title
 st.title("KNEE OSTEOARTHRITIS CLASSIFICATION BY KELLGREN AND LAWRENCE GRADING SYSTEM🦴🦵")
 
-# Sidebar for selecting image source
 st.sidebar.image("https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/logo.png", use_column_width=True)
 st.sidebar.write('# UPLOAD A X-RAY KNEE IMAGE TO CLASSIFY! 🧐')
 
-# Radio button to choose the image source
 option = st.sidebar.radio('', ['Use a test image', 'Use your own image'])
 
 bytes_data = None
