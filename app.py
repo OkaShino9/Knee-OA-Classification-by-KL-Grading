@@ -52,7 +52,8 @@ st.sidebar.write(" ")
 st.sidebar.write(" ")
 st.sidebar.markdown('This web application was developed by Chananchai Chanmol and is a part of AI Builders project, organized by VISTEC, Central Digital and Mahidol University.')
 st.sidebar.write("AI Builders page [link](https://www.facebook.com/aibuildersx)")
-st.sidebar.write("Medium [link](https://github.com/GemmyTheGeek/FoodyDudy)")
+st.sidebar.write("Medium [link](https://medium.com/@kungkao123456789/knee-osteoarthritis-classification-by-kellgren-and-lawrence-grading-system-with-fast-ai-2738287b0c2e)")
+st.sidebar.write("Github [link](https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading)")
 st.sidebar.image("https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/AIB_Logo.png", use_column_width=True)
 
 if option == 'Use a test image':
