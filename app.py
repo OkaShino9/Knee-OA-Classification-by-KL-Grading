@@ -81,4 +81,5 @@ if bytes_data:
         if image.mode != "RGB":
             image = image.convert("RGB")
         label, confidence = classify_img(image)
+        confidence_percentage = confidence * 100
         st.write(f"This is grade {label}! with probability of {confidence_percentage:.2f}%")
