@@ -42,7 +42,7 @@ bytes_data = None
 
 st.sidebar.write(" ")
 st.sidebar.write(" ")
-st.sidebar.markdown('This web application was developed by Chananchai Chanmol and is a part of AI Builders project, organized by VISTEC, Central Digital and Mahidol University.')
+st.sidebar.markdown('This web application was developed by Chananchai Chanmol and is a part of AI Builders 2024 program, organized by VISTEC, Central Digital and Mahidol University.')
 st.sidebar.write("AI Builders page [link](https://www.facebook.com/aibuildersx)")
 st.sidebar.write("Medium [link](https://medium.com/@kungkao123456789/knee-osteoarthritis-classification-by-kellgren-and-lawrence-grading-system-with-fast-ai-2738287b0c2e)")
 st.sidebar.write("Github [link](https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading)")
@@ -81,4 +81,4 @@ if bytes_data:
         if image.mode != "RGB":
             image = image.convert("RGB")
         label, confidence = classify_img(image)
-        st.write(f"This is grade {label}! ({confidence:.04f})")
+        st.write(f"This is grade {label}! with probability of {confidence_percentage:.2f}%")
