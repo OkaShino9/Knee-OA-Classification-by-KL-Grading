@@ -6,6 +6,8 @@ A model for classification knee osteoarthritis by Kellgren and Lawrence grading 
 
 Try it here: https://knee-oa-classification-by-kl-grading-arczai3yskjppkhxkztud4.streamlit.app/
 
+Dataset from SENURA PERERA: https://www.kaggle.com/datasets/senuraperera/knee-oa-new
+
 Medium: https://medium.com/@kungkao123456789/knee-osteoarthritis-classification-by-kellgren-and-lawrence-grading-system-with-fast-ai-2738287b0c2e
 
 AI Builders page: https://www.facebook.com/aibuildersx
