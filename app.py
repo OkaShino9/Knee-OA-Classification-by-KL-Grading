@@ -77,6 +77,8 @@ elif option == 'Use your own image':
     if uploaded_image:
         bytes_data = uploaded_image.getvalue()
         st.image(bytes_data, caption="Uploaded image")
+    else:
+            st.write("Error fetching image list from GitHub")
 
 if bytes_data:
     classify = st.button("CLASSIFY!")
