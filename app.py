@@ -48,13 +48,7 @@ st.sidebar.write("Medium [link](https://medium.com/@kungkao123456789/knee-osteoa
 st.sidebar.write("GitHub [link](https://github.com/OkaShino9/Knee-OA-Classification-by-KL-Grading)")
 st.sidebar.image("https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/AIB_Logo.png", use_column_width=True)
 
-if option == 'Use your own image':
-    uploaded_image = st.file_uploader("Choose your image:")
-    if uploaded_image:
-        bytes_data = uploaded_image.getvalue()
-        st.image(bytes_data, caption="Uploaded image")
-        
-elif option == 'Use a test image':
+if option == 'Use a test image':
     base_url = "https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/images/"
     class_folders = ["0", "1", "2", "3", "4"]
 
@@ -71,8 +65,14 @@ elif option == 'Use a test image':
                 response = requests.get(image_url)
                 bytes_data = response.content
                 st.image(bytes_data, caption="Test image")
-            else:
-                st.write("Error fetching image list from GitHub")
+        else:
+            st.write("Error fetching image list from GitHub")
+
+elif option == 'Use your own image':
+    uploaded_image = st.file_uploader("Choose your image:")
+    if uploaded_image:
+        bytes_data = uploaded_image.getvalue()
+        st.image(bytes_data, caption="Uploaded image")
 
 if bytes_data:
     classify = st.button("CLASSIFY!")
