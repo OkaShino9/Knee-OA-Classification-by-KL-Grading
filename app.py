@@ -50,29 +50,26 @@ st.sidebar.image("https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classifica
 
 if option == 'Use a test image':
     base_url = "https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/images/"
-    class_folders = ["0", "1", "2", "3", "4"]
+    image_files = {
+        "0": ["0_image1.png", "0_image2.png"],
+        "1": ["1_image1.png", "1_image2.png"],
+        "2": ["2_image1.png", "2_image2.png"],
+        "3": ["3_image1.png", "3_image2.png"],
+        "4": ["4_image1.png", "4_image2.png"]
+    }
 
+    class_folders = list(image_files.keys())
     selected_folder = st.selectbox("Choose a folder (class):", class_folders)
     if selected_folder:
-        folder_url = f"{base_url}{selected_folder}/"
-        api_url = f"https://api.github.com/repos/OkaShino9/Knee-OA-Classification-by-KL-Grading/contents/images/{selected_folder}"
-        response = requests.get(api_url)
-        if response.status_code == 200:
-            files = response.json()
-            image_files = [file["name"] for file in files if file["name"].lower().endswith((".png", ".jpg", ".jpeg"))]
-            selected_image = st.selectbox("Choose an image:", image_files)
-            if selected_image:
-                image_url = f"{folder_url}{selected_image}"
-                image_response = requests.get(image_url)
-                if image_response.status_code == 200:
-                    bytes_data = image_response.content
-                    st.image(bytes_data, caption="Test image")
-                else:
-                    st.write("Error fetching image from GitHub")
-        elif response.status_code == 403:
-            st.write("GitHub API rate limit exceeded. Please try again later.")
-        else:
-            st.write("Error fetching image list from GitHub")
+        selected_image = st.selectbox("Choose an image:", image_files[selected_folder])
+        if selected_image:
+            image_url = f"{base_url}{selected_folder}/{selected_image}"
+            response = requests.get(image_url)
+            if response.status_code == 200:
+                bytes_data = response.content
+                st.image(bytes_data, caption="Test image")
+            else:
+                st.write("Error fetching image from GitHub")
 
 elif option == 'Use your own image':
     uploaded_image = st.file_uploader("Choose your image:")
