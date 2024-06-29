@@ -71,13 +71,7 @@ elif option == 'Use a test image':
                 response = requests.get(image_url)
                 bytes_data = response.content
                 st.image(bytes_data, caption="Test image")
-
-elif option == 'Use your own image':
-    uploaded_image = st.file_uploader("Choose your image:")
-    if uploaded_image:
-        bytes_data = uploaded_image.getvalue()
-        st.image(bytes_data, caption="Uploaded image")
-    else:
+            else:
             st.write("Error fetching image list from GitHub")
 
 if bytes_data:
