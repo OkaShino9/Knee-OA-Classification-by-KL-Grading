@@ -55,16 +55,22 @@ if option == 'Use a test image':
     selected_folder = st.selectbox("Choose a folder (class):", class_folders)
     if selected_folder:
         folder_url = f"{base_url}{selected_folder}/"
-        response = requests.get(f"https://api.github.com/repos/OkaShino9/Knee-OA-Classification-by-KL-Grading/contents/images/{selected_folder}")
+        api_url = f"https://api.github.com/repos/OkaShino9/Knee-OA-Classification-by-KL-Grading/contents/images/{selected_folder}"
+        response = requests.get(api_url)
         if response.status_code == 200:
             files = response.json()
             image_files = [file["name"] for file in files if file["name"].lower().endswith((".png", ".jpg", ".jpeg"))]
             selected_image = st.selectbox("Choose an image:", image_files)
             if selected_image:
                 image_url = f"{folder_url}{selected_image}"
-                response = requests.get(image_url)
-                bytes_data = response.content
-                st.image(bytes_data, caption="Test image")
+                image_response = requests.get(image_url)
+                if image_response.status_code == 200:
+                    bytes_data = image_response.content
+                    st.image(bytes_data, caption="Test image")
+                else:
+                    st.write("Error fetching image from GitHub")
+        elif response.status_code == 403:
+            st.write("GitHub API rate limit exceeded. Please try again later.")
         else:
             st.write("Error fetching image list from GitHub")
 
