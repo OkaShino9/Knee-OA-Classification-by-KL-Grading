@@ -51,7 +51,7 @@ st.sidebar.image("https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classifica
 if option == 'Use a test image':
     base_url = "https://raw.githubusercontent.com/OkaShino9/Knee-OA-Classification-by-KL-Grading/main/images/"
     image_files = {
-        "0": ["0_image1.png", "0_image2.png"],
+        "0": ["9003175L.png", "0_image2.png"],
         "1": ["1_image1.png", "1_image2.png"],
         "2": ["2_image1.png", "2_image2.png"],
         "3": ["3_image1.png", "3_image2.png"],
