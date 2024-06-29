@@ -72,7 +72,7 @@ elif option == 'Use a test image':
                 bytes_data = response.content
                 st.image(bytes_data, caption="Test image")
             else:
-            st.write("Error fetching image list from GitHub")
+                st.write("Error fetching image list from GitHub")
 
 if bytes_data:
     classify = st.button("CLASSIFY!")
