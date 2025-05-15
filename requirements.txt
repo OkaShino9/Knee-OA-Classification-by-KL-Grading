@@ -1,4 +1,4 @@
-fastbook==2.7.0
+fastbook
 streamlit
 opencv-python-headless
 requests
