@@ -1,4 +1,5 @@
 fastbook<2.8.0
+fastai<2.8.0
 streamlit
 opencv-python-headless
 requests
